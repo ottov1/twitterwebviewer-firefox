@@ -1,15 +1,14 @@
 "use strict";
 
-// twitterwebviewer.com is a query-param app, not a path mirror:
+// v2: no external service. Tweet and profile links open the bundled
+// viewer page, which renders them from X's public embed endpoints
+// (the same ones official embedded tweets use):
 //
-//   x.com/naval                  -> twitterwebviewer.com/?user=naval
-//   x.com/naval/status/123       -> twitterwebviewer.com/?user=naval&tweet=123
-//   x.com/search?q=foo           -> twitterwebviewer.com/twitter-search?q=foo
-//   x.com/hashtag/foo            -> twitterwebviewer.com/twitter-search?q=%23foo
-//   anything else (home, /i/...) -> twitterwebviewer.com/
+//   x.com/naval            -> viewer.html?user=naval
+//   x.com/naval/status/123 -> viewer.html?tweet=123&user=naval
+//   anything else          -> viewer.html (search has no public endpoint)
 
-const VIEWER_ORIGIN = "https://twitterwebviewer.com";
-const SEARCH_PATH = "/twitter-search";
+const VIEWER_PAGE = browser.runtime.getURL("viewer.html");
 
 // Twitter paths whose first segment is a feature, not a username.
 const RESERVED_SEGMENTS = new Set([
@@ -22,28 +21,17 @@ const TWEET_PATH = /^\/([A-Za-z0-9_]{1,15})\/status(?:es)?\/(\d+)/;
 const PROFILE_PATH = /^\/([A-Za-z0-9_]{1,15})(?:\/(?:with_replies|media|likes|highlights))?\/?$/;
 
 function viewerUrl(twitterUrl) {
-  const url = new URL(twitterUrl);
-  const path = url.pathname;
+  const path = new URL(twitterUrl).pathname;
 
   const tweet = path.match(TWEET_PATH);
   if (tweet)
-    return `${VIEWER_ORIGIN}/?user=${tweet[1]}&tweet=${tweet[2]}`;
-
-  if (path === "/search" || path === "/search/") {
-    const query = url.searchParams.get("q");
-    if (query)
-      return `${VIEWER_ORIGIN}${SEARCH_PATH}?q=${encodeURIComponent(query)}`;
-  }
-
-  const hashtag = path.match(/^\/hashtag\/([^/]+)/);
-  if (hashtag)
-    return `${VIEWER_ORIGIN}${SEARCH_PATH}?q=${encodeURIComponent("#" + hashtag[1])}`;
+    return `${VIEWER_PAGE}?tweet=${tweet[2]}&user=${tweet[1]}`;
 
   const profile = path.match(PROFILE_PATH);
   if (profile && !RESERVED_SEGMENTS.has(profile[1].toLowerCase()))
-    return `${VIEWER_ORIGIN}/?user=${profile[1]}`;
+    return `${VIEWER_PAGE}?user=${profile[1]}`;
 
-  return `${VIEWER_ORIGIN}/`;
+  return VIEWER_PAGE;
 }
 
 function redirect(details) {

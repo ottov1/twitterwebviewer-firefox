@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Twitter Web Viewer Redirect",
-  "version": "1.0.0",
-  "description": "Redirects twitter.com and x.com links to twitterwebviewer.com, an alternative Twitter front-end. Like XCancel, but for twitterwebviewer.com. No affiliation with either site.",
+  "name": "X Tweet Viewer",
+  "version": "2.2.0",
+  "description": "View tweets, replies and profiles without an account. Renders twitter.com and x.com links in a built-in page — no external service. No affiliation with X.",
   "browser_specific_settings": {
     "gecko": {
       "id": "twitterwebviewer-redirect@ottov1",
@@ -23,8 +23,11 @@
     "*://mobile.twitter.com/*",
     "*://x.com/*",
     "*://www.x.com/*",
-    "*://mobile.x.com/*"
+    "*://mobile.x.com/*",
+    "https://cdn.syndication.twimg.com/*",
+    "https://syndication.twitter.com/*"
   ],
+  "web_accessible_resources": ["viewer.html"],
   "background": {
     "scripts": ["background.js"]
   }

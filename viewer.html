@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tweet Viewer</title>
+<style>
+  :root {
+    --bg: #f7f9f9;
+    --panel: #fff;
+    --border: #cfd9de;
+    --text: #0f1419;
+    --muted: #536471;
+    --accent: #1d9bf0;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.45 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .conv {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 16px 12px 60px;
+  }
+
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin: 10px 0;
+    background: var(--panel);
+  }
+  .card.main { font-size: 17px; }
+  .card.quote { margin: 10px 0 0; font-size: 14px; }
+  .card.open:hover { border-color: var(--muted); cursor: pointer; }
+
+  .thread { margin: 14px 0; }
+  .thread .card { margin: 0; border-radius: 0; border-top-width: 0; }
+  .thread .card:first-child { border-radius: 14px 14px 0 0; border-top-width: 1px; }
+  .thread .card:last-child { border-radius: 0 0 14px 14px; }
+  .thread .card:only-child { border-radius: 14px; }
+
+  .head { display: flex; align-items: center; gap: 10px; }
+  .who { display: flex; flex-direction: column; min-width: 0; }
+  .who .name { font-weight: 700; }
+  .date { margin-left: auto; font-size: 13px; white-space: nowrap; }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--border);
+    flex: none;
+  }
+  .avatar.big { width: 48px; height: 48px; }
+
+  .text { margin-top: 8px; white-space: pre-wrap; overflow-wrap: break-word; }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .muted { color: var(--muted); }
+  .tag { color: var(--accent); }
+  .note { margin: 12px 2px; }
+  .section { font-size: 16px; margin: 22px 2px 4px; }
+
+  .media { margin-top: 10px; display: grid; gap: 6px; }
+  .media img, .media video {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: block;
+  }
+  .vidthumb { position: relative; display: block; }
+  .vidthumb .play {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-size: 42px; color: #fff;
+    text-shadow: 0 0 12px #000;
+  }
+
+  .stats { display: flex; gap: 18px; margin-top: 10px; color: var(--muted); font-size: 13px; }
+
+  .profile {
+    display: flex; gap: 14px; align-items: center;
+    padding: 8px 2px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .profile .name { font-size: 19px; font-weight: 700; }
+  .profile .bio { margin-top: 4px; font-size: 14px; }
+
+  .home { text-align: center; padding-top: 12vh; }
+  .lookup { display: flex; gap: 8px; margin-top: 18px; }
+  .lookup input {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text);
+    font-size: 15px;
+    outline: none;
+  }
+  .lookup input:focus { border-color: var(--accent); }
+  .lookup button {
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<main id="app"><p class="muted" style="text-align:center;margin-top:20vh">Loading…</p></main>
+<script src="relay.js"></script>
+<script src="viewer.js"></script>
+</body>
+</html>
